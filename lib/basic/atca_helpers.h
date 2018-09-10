@@ -46,10 +46,14 @@ ATCA_STATUS atcab_bin2hex(const uint8_t* bin, size_t bin_size, char* hex, size_t
 ATCA_STATUS atcab_bin2hex_(const uint8_t* bin, size_t bin_size, char* hex, size_t* hex_size, bool is_pretty);
 ATCA_STATUS atcab_hex2bin(const char* ascii_hex, size_t ascii_hex_len, uint8_t* binary, size_t* bin_len);
 ATCA_STATUS atcab_printbin_sp(uint8_t* binary, size_t bin_len);
+#ifdef ATCAPRINTF
 ATCA_STATUS atcab_printbin_label(const char* label, uint8_t* binary, size_t bin_len);
+#else
+#define atcab_printbin_label(l, b, bl)
+#endif
 
 
-ATCA_STATUS packHex(const char* ascii_hex, size_t ascii_hex_len, char* packed_hex, size_t* packed_len);
+ATCA_STATUS packHex(const char* ascii_hex, int ascii_hex_len, char* packed_hex, int* packed_len);
 bool isDigit(char c);
 bool isWhiteSpace(char c);
 bool isAlpha(char c);

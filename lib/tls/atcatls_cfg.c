@@ -41,6 +41,7 @@
 //#include "certs/cert_def_2_device.h"
 //#include "atcacert/atcacert_def.h"
 #include "basic/atca_basic.h"
+#include "basic/atca_helpers.h"
 #ifdef ATCAPRINTF
 #include <stdio.h>
 #endif

@@ -6,6 +6,7 @@ option(ATCA_HAL_KIT_HID "Include the HID HAL Driver")
 option(ATCA_HAL_I2C "Include the I2C Hal Driver - Linux & MCU only")
 option(ATCA_PRINTF "Enable Debug print statements in library")
 option(ATCA_PKCS11 "Build PKCS11 Library")
+option(STATIC, "Build static version of library")
 
 # Collect Library Sources
 file(GLOB LIB_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.c")
@@ -18,7 +19,7 @@ file(GLOB PKCS11_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "pkcs11/*.c")
 file(GLOB TLS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "tls/*.c")
 
 # Add the basic sources to the library
-set(CRYPTOAUTH_SRC ${LIB_SRC} ${ATCACERT_SRC} ${BASIC_SRC} ${CRYPTO_SRC} ${HOST_SRC} ${JWT_SRC} hal/atca_hal.c )
+set(CRYPTOAUTH_SRC ${LIB_SRC} ${ATCACERT_SRC} ${BASIC_SRC} ${CRYPTO_SRC} ${HOST_SRC} ${JWT_SRC} ${TLS_SRC} hal/atca_hal.c )
 
 if(WIN32)
 set(CRYPTOAUTH_SRC ${CRYPTOAUTH_SRC} hal/hal_win_timer.c)
@@ -56,7 +57,11 @@ if(ATCA_PKCS11)
 set(CRYPTOAUTH_SRC ${CRYPTOAUTH_SRC} ${PKCS11_SRC})
 endif()
 
+if(STATIC)
+add_library(cryptoauth STATIC ${CRYPTOAUTH_SRC} ${ATCACERT_DEF_SRC})
+else(STATIC)
 add_library(cryptoauth SHARED ${CRYPTOAUTH_SRC} ${ATCACERT_DEF_SRC})
+endif(STATIC)
 
 # Add Remaining Sources depending on target library type
 if(ATCA_PKCS11)
