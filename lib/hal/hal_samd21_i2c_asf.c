@@ -247,20 +247,24 @@ ATCA_STATUS hal_i2c_init(void *hal, ATCAIfaceCfg *cfg)
         {
         case 0:
             data->i2c_sercom = SERCOM0;
-#ifdef __SAMD21G18A__
+#if defined(__SAMD21G18A__)
             config_i2c_master.pinmux_pad0 = PINMUX_PA08C_SERCOM0_PAD0;
             config_i2c_master.pinmux_pad1 = PINMUX_PA09C_SERCOM0_PAD1;
 #endif
             break;
         case 1:
             data->i2c_sercom = SERCOM1;
-#ifdef __SAMR21G18A__
+#if defined(__SAMD21G18A__)
             config_i2c_master.pinmux_pad0 = PINMUX_PA16C_SERCOM1_PAD0;
             config_i2c_master.pinmux_pad1 = PINMUX_PA17C_SERCOM1_PAD1;
 #endif
             break;
         case 2:
             data->i2c_sercom = SERCOM2;
+#if defined(__SAMD21J18A__)
+            config_i2c_master.pinmux_pad0 = PINMUX_PA08D_SERCOM2_PAD0;
+            config_i2c_master.pinmux_pad1 = PINMUX_PA09D_SERCOM2_PAD1;
+#endif
             break;
         case 3:
             data->i2c_sercom = SERCOM3;
