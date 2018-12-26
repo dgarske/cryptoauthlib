@@ -45,6 +45,7 @@
 #include "atca_crypto_sw_tests.h"
 #include "cmd-processor.h"
 #include "atca_cfgs.h"
+#include "tls/atcatls_tests.h"
 
 static ATCA_STATUS set_test_config(ATCADeviceType deviceType);
 static int certdata_unit_tests(void);
@@ -79,6 +80,11 @@ static ATCA_STATUS set_chip_mode(uint8_t i2c_user_extra_add, uint8_t ttl_enable,
 static void set_clock_divider_m0(void);
 static void set_clock_divider_m1(void);
 static void set_clock_divider_m2(void);
+static int run_atcatls_test(void)
+{
+    return atcatls_test_runner(gCfg);
+}
+
 
 static const char* argv[] = { "manual", "-v" };
 // *INDENT-OFF*  - Preserve formatting
@@ -114,6 +120,7 @@ static t_menu_info mas_menu_info[] =
     #ifndef DO_NOT_TEST_SW_CRYPTO
     { "crypto",   "Run Unit Tests for Software Crypto Functions",   (fp_menu_handler)atca_crypto_sw_tests},
     #endif
+    { "tls",      "Run Unit Tests for TLS functions",               (fp_menu_handler)run_atcatls_test    },
     { NULL,       NULL,                                             NULL                                 },
 };
 // *INDENT-ON*
@@ -790,6 +797,13 @@ static void run_all_tests(void)
         return;
     }
 #endif
+
+    fails = run_atcatls_test();
+    if (fails > 0)
+    {
+        printf("tls tests failed.\r\n");
+        return;
+    }
 
 #ifndef DO_NOT_TEST_CERT
     if (atIsECCFamily(gCfg->devtype))
